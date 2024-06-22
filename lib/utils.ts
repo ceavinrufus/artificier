@@ -116,7 +116,9 @@ export const download = (url: string, filename: string) => {
   }
 
   fetch(url)
-    .then((response) => response.blob())
+    .then((response) => {
+      return response.blob();
+    })
     .then((blob) => {
       const blobURL = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -126,6 +128,8 @@ export const download = (url: string, filename: string) => {
         a.download = `${filename.replace(" ", "_")}.png`;
       document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobURL);
     })
     .catch((error) => console.log({ error }));
 };
